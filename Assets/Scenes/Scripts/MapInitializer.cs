@@ -46,7 +46,7 @@ public class MapInitializer : MonoBehaviour {
         }
 
         for (int i = 0; i < Roads.Count; i++) {
-            Cars.Add(Instantiate(Car, Roads[i].transform.position, Quaternion.identity));
+            Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
             Cars.Last().name = "Car" + i;
         }
     }
