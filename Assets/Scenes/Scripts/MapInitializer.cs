@@ -8,6 +8,7 @@ public class MapInitializer : MonoBehaviour {
     public GameObject Roadway;  // Дорожное полотно, используемое в построении карты.
     public GameObject GrassSurface;  // Травяная поверхность, используемая в построении карты.
     public GameObject Car;
+    public GameObject CarBarrier;
     public float CarSpeed = 10;
     // public float LineSize = 30;
 
@@ -21,13 +22,14 @@ public class MapInitializer : MonoBehaviour {
 
     void Start()
     {
+        // Создаём карту.
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
         GenerateMap(50);  // Получаем двоичную карту.
+        // Debug.Log(Map.Count);
+        // Debug.Log(System.String.Join(", ", Map));
 
-        Debug.Log(Map.Count);
-        Debug.Log(System.String.Join(", ", Map));
-
+        // Создаём само полотно.
         float CurrentZ = 0;  // Переменная, отслеживающая крайнюю позицию карты.
         for (int i = 0; i < Map.Count; i++) {
             if (Map[i] == 1) {  // Дорога.
@@ -46,6 +48,11 @@ public class MapInitializer : MonoBehaviour {
             }
         }
 
+        // Делаем барьеры для автомобилей.
+        GameObject LeftCarBarrier = Instantiate(CarBarrier, new Vector3(0 - GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
+        GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
+
+        // Спавним машины.
         for (int i = 0; i < Roads.Count; i++) {
             Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
             Cars.Last().name = "Car" + i;
