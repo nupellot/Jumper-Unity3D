@@ -8,6 +8,7 @@ public class MapInitializer : MonoBehaviour {
     public GameObject Roadway;  // Дорожное полотно, используемое в построении карты.
     public GameObject GrassSurface;  // Травяная поверхность, используемая в построении карты.
     public GameObject Car;
+    public float CarSpeed = 10;
     // public float LineSize = 30;
 
     private List<GameObject> Roads = new List<GameObject>();
@@ -46,15 +47,16 @@ public class MapInitializer : MonoBehaviour {
         }
 
         for (int i = 0; i < Roads.Count; i++) {
-            Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
+            Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
             Cars.Last().name = "Car" + i;
         }
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
+    void Update() {
+        foreach (GameObject Car in Cars) {
+            Car.GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+        }
     }
 
     void GenerateMap(int MapSize = 10) {
