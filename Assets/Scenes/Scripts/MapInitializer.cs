@@ -26,11 +26,13 @@ public class MapInitializer : MonoBehaviour {
             if (Map[i] == 1) {  // Дорога.
                 CurrentZ += RoadSize;
                 Instantiate(Roadway, new Vector3(0, 0, CurrentZ), Quaternion.identity);
+                // Roadway.transform.localScale = new Vector3(30, 1, 1);
                 Roadway.name = "Line " + i;
                 Debug.Log("Roadway at " + i);
             } else if (Map[i] == 0) {  // Травяной покров.
                 CurrentZ += GrassSurfaceSize;
                 Instantiate(GrassSurface, new Vector3(0, 0, CurrentZ), Quaternion.identity);
+                // GrassSurface.transform.localScale = new Vector3(30, 1, 1);
                 GrassSurface.name = "Line " + i;
                 Debug.Log("GrassSurface at " + i);
             } else {
