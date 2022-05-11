@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class MapInitializer : MonoBehaviour {
 
-    public GameObject Roadway;
-    public GameObject GrassSurface;
+    public GameObject Roadway;  // Дорожное полотно, используемое в построении карты.
+    public GameObject GrassSurface;  // Травяная поверхность, используемая в построении карты.
     // public float LineSize = 30;
+
+    private List<GameObject> Roads = new List<GameObject>();
+    private List<GameObject> Grasses = new List<GameObject>();
     private float RoadSize;
     private float GrassSurfaceSize;
     private List<int> Map = new List<int>() {0, 0, 0, 0, 0};  // Карта игрового поля.
@@ -16,7 +19,7 @@ public class MapInitializer : MonoBehaviour {
     {
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
-        GenerateMap(10);
+        GenerateMap(20);  // Получаем двоичную карту.
 
         Debug.Log(Map.Count);
         Debug.Log(System.String.Join(", ", Map));
