@@ -7,10 +7,12 @@ public class MapInitializer : MonoBehaviour {
 
     public GameObject Roadway;  // Дорожное полотно, используемое в построении карты.
     public GameObject GrassSurface;  // Травяная поверхность, используемая в построении карты.
+    public GameObject Car;
     // public float LineSize = 30;
 
     private List<GameObject> Roads = new List<GameObject>();
     private List<GameObject> Grasses = new List<GameObject>();
+    private List<GameObject> Cars = new List<GameObject>();
     private float RoadSize;
     private float GrassSurfaceSize;
     private List<int> Map = new List<int>() {0, 0, 0, 0, 0};  // Карта игрового поля.
@@ -20,7 +22,7 @@ public class MapInitializer : MonoBehaviour {
     {
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
-        GenerateMap(20);  // Получаем двоичную карту.
+        GenerateMap(50);  // Получаем двоичную карту.
 
         Debug.Log(Map.Count);
         Debug.Log(System.String.Join(", ", Map));
@@ -41,6 +43,11 @@ public class MapInitializer : MonoBehaviour {
             } else {
                 Debug.Log("Wrong map element " + i + ": " + Map[i]);
             }
+        }
+
+        for (int i = 0; i < Roads.Count; i++) {
+            Cars.Add(Instantiate(Car, Roads[i].transform.position, Quaternion.identity));
+            Cars.Last().name = "Car" + i;
         }
     }
 
