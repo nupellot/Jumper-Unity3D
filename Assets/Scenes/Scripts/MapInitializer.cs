@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MapInitializer : MonoBehaviour {
@@ -28,15 +29,14 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < Map.Count; i++) {
             if (Map[i] == 1) {  // Дорога.
                 CurrentZ += RoadSize;
-                Instantiate(Roadway, new Vector3(0, 0, CurrentZ), Quaternion.identity);
-                // Roadway.transform.localScale = new Vector3(30, 1, 1);
-                Roadway.name = "Line " + i;
+                // Создаём новый элемент дороги и сразу же засовываем его в массив.
+                Roads.Add(Instantiate(Roadway, new Vector3(0, 0, CurrentZ), Quaternion.identity));
+                Roads.Last().name = "Line" + i;  // Задаём имя, отоборажающееся в инспекторе.
                 Debug.Log("Roadway at " + i);
             } else if (Map[i] == 0) {  // Травяной покров.
                 CurrentZ += GrassSurfaceSize;
-                Instantiate(GrassSurface, new Vector3(0, 0, CurrentZ), Quaternion.identity);
-                // GrassSurface.transform.localScale = new Vector3(30, 1, 1);
-                GrassSurface.name = "Line " + i;
+                Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, CurrentZ), Quaternion.identity));
+                Grasses.Last().name = "Line" + i;
                 Debug.Log("GrassSurface at " + i);
             } else {
                 Debug.Log("Wrong map element " + i + ": " + Map[i]);
