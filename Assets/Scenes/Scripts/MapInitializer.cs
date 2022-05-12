@@ -75,6 +75,13 @@ public class MapInitializer : MonoBehaviour {
         }
     }
 
+    // private void OnTriggerEnter(Collider other) {
+    //     Debug.Log("Collision");
+    //     if (this.CompareTag("Car") && other.CompareTag("Barrier")) {
+    //         Destroy(this.gameObject);
+    //     }
+    // }
+
 
     // void Spawn(GameObject Object, Vector3 Coords, int number) {
     //     Instantiate(Object);
