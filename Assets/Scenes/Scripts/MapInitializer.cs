@@ -14,7 +14,7 @@ public class MapInitializer : MonoBehaviour {
 
     private List<GameObject> Roads = new List<GameObject>();
     private List<GameObject> Grasses = new List<GameObject>();
-    private List<GameObject> Cars = new List<GameObject>();
+    public List<GameObject> Cars = new List<GameObject>();
     private float RoadSize;
     private float GrassSurfaceSize;
     private List<int> Map = new List<int>() {0, 0, 0, 0, 0};  // Карта игрового поля.
@@ -61,8 +61,22 @@ public class MapInitializer : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        foreach (GameObject Car in Cars) {
-            Car.GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+        // foreach (GameObject Car in Cars) {
+        //     if (Car != null) {
+        //         Car.GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+        //     } else
+        //     if (Car == null) {
+        //         Cars.Remove(Car);
+        //     }
+        // }
+
+        for (int i = 0; i < Cars.Count; i++) {
+            if (Cars[i] != null) {
+                Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+            } else
+            if (Cars[i] == null) {
+                Cars.Remove(Car);
+            }
         }
     }
 
@@ -74,6 +88,13 @@ public class MapInitializer : MonoBehaviour {
             Map.Add(kek);
         }
     }
+
+    // void OnCollisionEnter(Collision col) {
+    //     Debug.Log("Collision");
+    //     if (this.gameObject.CompareTag("Car") && col.gameObject.CompareTag("Barrier")) {
+    //         Destroy(this.gameObject);
+    //     }
+    // }
 
     // private void OnTriggerEnter(Collider other) {
     //     Debug.Log("Collision");
