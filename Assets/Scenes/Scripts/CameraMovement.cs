@@ -5,10 +5,13 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     // Игрок, за движением которого мы наблюдаем.
-    [SerializeField] private Transform dude;
+    public GameObject Player;
     public float height = 5;
     public float xShift = 10;
     public float zShift = 10;
+    public float xAngle = 0;
+    public float yAngle = 0;
+    public float zAngle = 0;
 
     void Start()
     {
@@ -24,6 +27,7 @@ public class CameraMovement : MonoBehaviour
         // transform.Translate(Difference - new Vector3(0, Difference.y, 0));  // Перемещаем камеру вслед за игроком.
         // transform.Translate(new Vector3(10, 0, 10));
 
-        transform.position = new Vector3(dude.position.x + xShift, height, dude.position.z - zShift);
+        transform.position = new Vector3(Player.transform.position.x + xShift, height, Player.transform.position.z - zShift);
+        transform.rotation = Quaternion.Euler(xAngle, yAngle, zAngle);
     }
 }

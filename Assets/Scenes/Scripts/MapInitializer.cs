@@ -9,12 +9,14 @@ public class MapInitializer : MonoBehaviour {
     public GameObject GrassSurface;  // Травяная поверхность, используемая в построении карты.
     public GameObject Car;
     public GameObject CarBarrier;
+    public GameObject PlayerTemplate;
     public float CarSpeed = 10;
     // public float LineSize = 30;
 
     private List<GameObject> Roads = new List<GameObject>();
     private List<GameObject> Grasses = new List<GameObject>();
     public List<GameObject> Cars = new List<GameObject>();
+    private GameObject Player;
     private float RoadSize;
     private float GrassSurfaceSize;
     private List<int> Map = new List<int>() {0, 0, 0, 0, 0};  // Карта игрового поля.
@@ -52,6 +54,10 @@ public class MapInitializer : MonoBehaviour {
         GameObject LeftCarBarrier = Instantiate(CarBarrier, new Vector3(0 - GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
         GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
 
+        // Спавним игрока.
+        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 5), Quaternion.Euler(0, 90, 0));
+        Player.name = "_Dude_";
+
         // Спавним машины.
         for (int i = 0; i < Roads.Count; i++) {
             Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
@@ -61,15 +67,6 @@ public class MapInitializer : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        // foreach (GameObject Car in Cars) {
-        //     if (Car != null) {
-        //         Car.GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
-        //     } else
-        //     if (Car == null) {
-        //         Cars.Remove(Car);
-        //     }
-        // }
-
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] != null) {
                 Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
