@@ -29,7 +29,7 @@ public class movement4 : MonoBehaviour
     }
 
     private void discreteMovement() {
-        if (_isGrounded) {
+        if (this.transform.position.y - 0.1 <= this.GetComponent<Renderer>().bounds.size.y / 2) {
             Debug.Log("Is Grounded");
             _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
 
@@ -56,7 +56,7 @@ public class movement4 : MonoBehaviour
                   }
             }
         } else
-        if (!_isGrounded) {
+        if (this.transform.position.y - 0.1 >= this.GetComponent<Renderer>().bounds.size.y / 2) {
             Debug.Log("Not Grounded");
             _rb.AddForce(Vector3.down * AdditionalPressure);
         }
@@ -71,24 +71,24 @@ public class movement4 : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Ground") {
-            _isGrounded = true;
-        }
-
-        // IsGroundedUpate(collision, true);
-    }
-
-    void OnCollisionExit(Collision collision) {
-      if (collision.gameObject.tag == "Ground") {
-          _isGrounded = false;
-      }
-        // IsGroundedUpate(collision, false);
-    }
-
-    private void IsGroundedUpate(Collision collision, bool value) {
-        if (collision.gameObject.tag == ("Ground")) {
-            _isGrounded = value;
-        }
-    }
+    // void OnCollisionEnter(Collision collision) {
+    //     if (collision.gameObject.tag == "Ground") {
+    //         _isGrounded = true;
+    //     }
+    //
+    //     // IsGroundedUpate(collision, true);
+    // }
+    //
+    // void OnCollisionExit(Collision collision) {
+    //   if (collision.gameObject.tag == "Ground") {
+    //       _isGrounded = false;
+    //   }
+    //     // IsGroundedUpate(collision, false);
+    // }
+    //
+    // private void IsGroundedUpate(Collision collision, bool value) {
+    //     if (collision.gameObject.tag == ("Ground")) {
+    //         _isGrounded = value;
+    //     }
+    // }
 }
