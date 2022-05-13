@@ -11,6 +11,8 @@ public class MapInitializer : MonoBehaviour {
     public GameObject CarBarrier;
     public GameObject PlayerTemplate;
     public float CarSpeed = 10;
+    public float MinCarSpawnTime = 1;
+    public float MaxCarSpawnTime = 10;
     // public float LineSize = 30;
 
     private List<GameObject> Roads = new List<GameObject>();
@@ -57,10 +59,11 @@ public class MapInitializer : MonoBehaviour {
         Player.name = "_Dude_";
 
         // Спавним машины.
-        for (int i = 0; i < Roads.Count; i++) {
-            Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
-            Cars.Last().name = "Car" + i;
-        }
+        // for (int i = 0; i < Roads.Count; i++) {
+        //     Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
+        //     Cars.Last().name = "Car" + i;
+        // }
+        CarSpawn();
     }
 
     // Update is called once per frame
@@ -68,19 +71,22 @@ public class MapInitializer : MonoBehaviour {
         CleanDeletedCars();
         SetCarsSpeed();
 
-
     }
 
     void CarSpawn() {
-        foreach (GameObject Car in Cars) {
-            // StartCoroutine(CarCoroutine());
+        foreach (GameObject Road in Roads) {
+            StartCoroutine(CarCoroutine(Road));
         }
     }
 
-    // IEnumerator CarCoroutine() {
-    //     float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
-    //     yield return new WaitForSeconds(delay);
-    // }
+    IEnumerator CarCoroutine(GameObject Road) {
+        while (true) {
+            Cars.Add(Instantiate(Car, Road.transform.position - Road.GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
+            // Cars.Last().name = "Car" + i;
+            float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
+            yield return new WaitForSeconds(delay);
+        }
+    }
 
 
     void GenerateMap(int MapSize = 10) {
@@ -96,8 +102,10 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] == null) {
                 Cars.Remove(Car);
+                Debug.Log("Car is deleted");
             }
         }
+        Debug.Log(Cars.Count);
     }
 
     void SetCarsSpeed() {
