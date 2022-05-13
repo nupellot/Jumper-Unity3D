@@ -65,12 +65,23 @@ public class MapInitializer : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        SimpleCarSpawn();
+        CleanDeletedCars();
+        SetCarsSpeed();
 
 
     }
 
-    
+    void CarSpawn() {
+        foreach (GameObject Car in Cars) {
+            // StartCoroutine(CarCoroutine());
+        }
+    }
+
+    // IEnumerator CarCoroutine() {
+    //     float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
+    //     yield return new WaitForSeconds(delay);
+    // }
+
 
     void GenerateMap(int MapSize = 10) {
         System.Random random = new System.Random();
@@ -81,13 +92,20 @@ public class MapInitializer : MonoBehaviour {
         }
     }
 
-    void SimpleCarSpawn() {
+    void CleanDeletedCars() {
+        for (int i = 0; i < Cars.Count; i++) {
+            if (Cars[i] == null) {
+                Cars.Remove(Car);
+            }
+        }
+    }
+
+    void SetCarsSpeed() {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] != null) {
                 Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
-            } else
-            if (Cars[i] == null) {
-                Cars.Remove(Car);
+            } else {
+                Debug.Log("Moving deleted car");
             }
         }
     }
