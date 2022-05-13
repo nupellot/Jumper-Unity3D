@@ -28,8 +28,6 @@ public class MapInitializer : MonoBehaviour {
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
         GenerateMap(50);  // Получаем двоичную карту.
-        // Debug.Log(Map.Count);
-        // Debug.Log(System.String.Join(", ", Map));
 
         // Создаём само полотно.
         float CurrentZ = 0;  // Переменная, отслеживающая крайнюю позицию карты.
@@ -67,15 +65,12 @@ public class MapInitializer : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        for (int i = 0; i < Cars.Count; i++) {
-            if (Cars[i] != null) {
-                Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
-            } else
-            if (Cars[i] == null) {
-                Cars.Remove(Car);
-            }
-        }
+        SimpleCarSpawn();
+
+
     }
+
+    
 
     void GenerateMap(int MapSize = 10) {
         System.Random random = new System.Random();
@@ -86,6 +81,16 @@ public class MapInitializer : MonoBehaviour {
         }
     }
 
+    void SimpleCarSpawn() {
+        for (int i = 0; i < Cars.Count; i++) {
+            if (Cars[i] != null) {
+                Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+            } else
+            if (Cars[i] == null) {
+                Cars.Remove(Car);
+            }
+        }
+    }
     // void OnCollisionEnter(Collision col) {
     //     Debug.Log("Collision");
     //     if (this.gameObject.CompareTag("Car") && col.gameObject.CompareTag("Barrier")) {
