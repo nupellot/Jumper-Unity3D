@@ -30,34 +30,35 @@ public class movement4 : MonoBehaviour
 
     private void discreteMovement() {
         if (_isGrounded) {
-          _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
+            Debug.Log("Is Grounded");
+            _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
 
-          if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
-                _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
-                if (Input.GetAxis("Horizontal") > 0) {
-                    _rb.AddForce(new Vector3(1, 0, 0) * ForwardForce);
-                    transform.rotation = Quaternion.Euler(0, 90, 0);
-                }
-                if (Input.GetAxis("Horizontal") < 0) {
-                    _rb.AddForce(new Vector3(-1, 0, 0) * ForwardForce);
-                    transform.rotation = Quaternion.Euler(0, 270, 0);
-                }
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
+                  _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
+                  if (Input.GetAxis("Horizontal") > 0) {
+                      _rb.AddForce(new Vector3(1, 0, 0) * ForwardForce);
+                      transform.rotation = Quaternion.Euler(0, 90, 0);
+                  }
+                  if (Input.GetAxis("Horizontal") < 0) {
+                      _rb.AddForce(new Vector3(-1, 0, 0) * ForwardForce);
+                      transform.rotation = Quaternion.Euler(0, 270, 0);
+                  }
 
-                if (Input.GetAxis("Horizontal") == 0) {
-                  if (Input.GetAxis("Vertical") > 0) {
-                    _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
-                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                  if (Input.GetAxis("Horizontal") == 0) {
+                    if (Input.GetAxis("Vertical") > 0) {
+                      _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
+                      transform.rotation = Quaternion.Euler(0, 0, 0);
+                    }
+                    if (Input.GetAxis("Vertical") < 0) {
+                      _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
+                      transform.rotation = Quaternion.Euler(0, 180, 0);
+                    }
                   }
-                  if (Input.GetAxis("Vertical") < 0) {
-                    _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
-                    transform.rotation = Quaternion.Euler(0, 180, 0);
-                  }
-                }
-          }
-        } else if (!_isGrounded) {
-            // if (_rb.velocity.y < 0) {
-              _rb.AddForce(Vector3.down * AdditionalPressure);
-            // }
+            }
+        } else
+        if (!_isGrounded) {
+            Debug.Log("Not Grounded");
+            _rb.AddForce(Vector3.down * AdditionalPressure);
         }
     }
 
@@ -70,20 +71,23 @@ public class movement4 : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        IsGroundedUpate(collision, true);
+    void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.tag == "Ground") {
+            _isGrounded = true;
+        }
+
+        // IsGroundedUpate(collision, true);
     }
 
-    void OnCollisionExit(Collision collision)
-    {
-        IsGroundedUpate(collision, false);
+    void OnCollisionExit(Collision collision) {
+      if (collision.gameObject.tag == "Ground") {
+          _isGrounded = false;
+      }
+        // IsGroundedUpate(collision, false);
     }
 
-    private void IsGroundedUpate(Collision collision, bool value)
-    {
-        if (collision.gameObject.tag == ("Ground"))
-        {
+    private void IsGroundedUpate(Collision collision, bool value) {
+        if (collision.gameObject.tag == ("Ground")) {
             _isGrounded = value;
         }
     }
