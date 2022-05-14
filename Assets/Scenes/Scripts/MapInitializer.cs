@@ -101,7 +101,7 @@ public class MapInitializer : MonoBehaviour {
     void CleanDeletedCars() {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] == null) {
-                Cars.Remove(Car);
+                Cars.Remove(Cars[i]);
                 Debug.Log("Car is deleted");
             }
         }
@@ -112,7 +112,8 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] != null) {
                 Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
-            } else {
+            } else
+            if (Cars[i] == null) {
                 Debug.Log("Moving deleted car");
             }
         }
