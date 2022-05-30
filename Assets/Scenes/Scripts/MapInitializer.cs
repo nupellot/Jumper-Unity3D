@@ -63,7 +63,7 @@ public class MapInitializer : MonoBehaviour {
         //     Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
         //     Cars.Last().name = "Car" + i;
         // }
-        CarSpawn();
+        StartCarSpawn();
     }
 
     // Update is called once per frame
@@ -73,7 +73,7 @@ public class MapInitializer : MonoBehaviour {
 
     }
 
-    void CarSpawn() {
+    void StartCarSpawn() {
         foreach (GameObject Road in Roads) {
             StartCoroutine(CarCoroutine(Road));
         }
@@ -102,10 +102,10 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] == null) {
                 Cars.Remove(Cars[i]);
-                Debug.Log("Car is deleted");
+                // Debug.Log("Car is deleted");
             }
         }
-        Debug.Log(Cars.Count);
+        // Debug.Log(Cars.Count + " Машин на карте в данный момент");
     }
 
     void SetCarsSpeed() {
@@ -115,6 +115,7 @@ public class MapInitializer : MonoBehaviour {
             } else
             if (Cars[i] == null) {
                 Debug.Log("Moving deleted car");
+                // Судя по всему, в обработке удалённой машины нет ничего критичного.
             }
         }
     }

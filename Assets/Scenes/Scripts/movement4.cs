@@ -16,24 +16,27 @@ public class movement4 : MonoBehaviour
     //что бы эта переменная работала добавьте тэг "Ground" на вашу поверхность земли
     private bool _isGrounded;
     private Rigidbody _rb;
+    private int CurrentZPosition = 0;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        PlayerPrefs.SetInt("Record", 0);
     }
 
 
     void FixedUpdate()
     {
-        discreteMovement();
+        DiscreteMovement();
+        UpdateRecord();
     }
 
-    private void discreteMovement() {
+    private void DiscreteMovement() {
+        // Проверяем, находится ли игрок ниже определенного уровня (условно )
         if (this.transform.position.y - 0.1 <= this.GetComponent<Renderer>().bounds.size.y / 2) {
-            Debug.Log("Is Grounded");
+            // Debug.Log("Is Grounded");
             _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
-
-            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {  // Проиходит прыжок в одном из направлений.
                   _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
                   if (Input.GetAxis("Horizontal") > 0) {
                       _rb.AddForce(new Vector3(1, 0, 0) * ForwardForce);
@@ -45,19 +48,21 @@ public class movement4 : MonoBehaviour
                   }
 
                   if (Input.GetAxis("Horizontal") == 0) {
-                    if (Input.GetAxis("Vertical") > 0) {
-                      _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
-                      transform.rotation = Quaternion.Euler(0, 0, 0);
-                    }
-                    if (Input.GetAxis("Vertical") < 0) {
-                      _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
-                      transform.rotation = Quaternion.Euler(0, 180, 0);
-                    }
+                      if (Input.GetAxis("Vertical") > 0) {  // Это движение вперёд. (Вдоль оси Z)
+                          _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
+                          transform.rotation = Quaternion.Euler(0, 0, 0);
+                          CurrentZPosition += 1;
+                      }
+                      if (Input.GetAxis("Vertical") < 0) {
+                          _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
+                          transform.rotation = Quaternion.Euler(0, 180, 0);
+                          CurrentZPosition -= 1;
+                      }
                   }
             }
         } else
         if (this.transform.position.y - 0.1 >= this.GetComponent<Renderer>().bounds.size.y / 2) {
-            Debug.Log("Not Grounded");
+            // Debug.Log("Not Grounded");
             _rb.AddForce(Vector3.down * AdditionalPressure);
         }
     }
@@ -69,6 +74,13 @@ public class movement4 : MonoBehaviour
                 _rb.AddForce(Vector3.up * JumpForce);
             }
         }
+    }
+
+    private void UpdateRecord() {
+        if (CurrentZPosition > PlayerPrefs.GetInt("Record")) {
+            PlayerPrefs.SetInt("Record", CurrentZPosition);
+        }
+        Debug.Log("Рекорд: " + PlayerPrefs.GetInt("Record"));
     }
 
     // void OnCollisionEnter(Collision collision) {
