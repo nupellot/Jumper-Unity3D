@@ -13,7 +13,6 @@ public class movement4 : MonoBehaviour
     public float ForwardForce = 5;
     public float AdditionalPressure = 0;
 
-    //что бы эта переменная работала добавьте тэг "Ground" на вашу поверхность земли
     private bool _isGrounded;
     private Rigidbody _rb;
     private int CurrentZPosition = 0;
