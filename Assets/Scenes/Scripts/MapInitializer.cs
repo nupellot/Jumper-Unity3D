@@ -30,6 +30,7 @@ public class MapInitializer : MonoBehaviour {
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
         GenerateMap(50);  // Получаем двоичную карту.
+        Record.text;
 
         // Создаём само полотно.
         float CurrentZ = 0;  // Переменная, отслеживающая крайнюю позицию карты.
