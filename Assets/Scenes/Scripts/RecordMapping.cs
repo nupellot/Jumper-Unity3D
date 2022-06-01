@@ -15,6 +15,6 @@ public class RecordMapping : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetComponent<Text>().text = PlayerPrefs.GetInt("Record").ToString();
+        GetComponent<Text>().text = "Record: " + PlayerPrefs.GetInt("Record").ToString();
     }
 }
