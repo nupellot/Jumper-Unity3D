@@ -72,7 +72,7 @@ public class MapInitializer : MonoBehaviour {
     void Update() {
         CleanDeletedCars();
         SetCarsSpeed();
-
+        CheckForRecordReset();
     }
 
     void StartCarSpawn() {
@@ -123,6 +123,13 @@ public class MapInitializer : MonoBehaviour {
                 Debug.Log("Moving deleted car");
                 // Судя по всему, в обработке удалённой машины нет ничего критичного.
             }
+        }
+    }
+
+    void CheckForRecordReset() {
+        if (Input.GetKeyDown(KeyCode.R)) {
+            PlayerPrefs.SetInt("Record", 0);
+            Debug.Log("Рекорд сброшен");
         }
     }
     // void OnCollisionEnter(Collision col) {
