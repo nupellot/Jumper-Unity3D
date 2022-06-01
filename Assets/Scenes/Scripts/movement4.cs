@@ -15,12 +15,11 @@ public class movement4 : MonoBehaviour
 
     private bool _isGrounded;
     private Rigidbody _rb;
-    private int CurrentZPosition = 0;
+    // private int CurrentZPosition = 0;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        PlayerPrefs.SetInt("Record", 0);
     }
 
 
@@ -45,17 +44,22 @@ public class movement4 : MonoBehaviour
                       _rb.AddForce(new Vector3(-1, 0, 0) * ForwardForce);
                       transform.rotation = Quaternion.Euler(0, 270, 0);
                   }
-
                   if (Input.GetAxis("Horizontal") == 0) {
                       if (Input.GetAxis("Vertical") > 0) {  // Это движение вперёд. (Вдоль оси Z)
+                          if (PlayerPrefs.HasKey("CurrentZPosition")) {
+                              PlayerPrefs.SetInt("CurrentZPosition", PlayerPrefs.GetInt("CurrentZPosition") + 1);
+                          }
                           _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
                           transform.rotation = Quaternion.Euler(0, 0, 0);
-                          CurrentZPosition += 1;
+                          // CurrentZPosition += 1;
                       }
                       if (Input.GetAxis("Vertical") < 0) {
+                          if (PlayerPrefs.HasKey("CurrentZPosition")) {
+                              PlayerPrefs.SetInt("CurrentZPosition", PlayerPrefs.GetInt("CurrentZPosition") - 1);
+                          }
                           _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
                           transform.rotation = Quaternion.Euler(0, 180, 0);
-                          CurrentZPosition -= 1;
+                          // CurrentZPosition -= 1;
                       }
                   }
             }
@@ -76,8 +80,8 @@ public class movement4 : MonoBehaviour
     // }
 
     private void UpdateRecord() {
-        if (CurrentZPosition > PlayerPrefs.GetInt("Record")) {
-            PlayerPrefs.SetInt("Record", CurrentZPosition);
+        if (PlayerPrefs.GetInt("CurrentZPosition") > PlayerPrefs.GetInt("Record")) {
+            PlayerPrefs.SetInt("Record", PlayerPrefs.GetInt("CurrentZPosition"));
         }
         Debug.Log("Рекорд: " + PlayerPrefs.GetInt("Record"));
     }

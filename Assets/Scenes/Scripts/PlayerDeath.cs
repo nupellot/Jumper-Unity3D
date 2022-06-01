@@ -24,6 +24,7 @@ public class PlayerDeath : MonoBehaviour
         if (this.gameObject.CompareTag("Player") && col.gameObject.CompareTag("Car")) {
             Debug.Log("You're Dead");
             this.transform.position = new Vector3(0, 5, 0);
+            PlayerPrefs.SetInt("CurrentZPosition", 0);
         }
     }
 }

@@ -26,6 +26,7 @@ public class MapInitializer : MonoBehaviour {
 
     void Start()
     {
+        // CarDestruction.singleton.CarIsDeleted += DeleteCar;
         // Создаём карту.
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
@@ -107,6 +108,10 @@ public class MapInitializer : MonoBehaviour {
             }
         }
         // Debug.Log(Cars.Count + " Машин на карте в данный момент");
+    }
+
+    public void DeleteCar(GameObject Car) {
+        Cars.Remove(Car);
     }
 
     void SetCarsSpeed() {
