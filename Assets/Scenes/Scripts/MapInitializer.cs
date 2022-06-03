@@ -13,8 +13,8 @@ public class MapInitializer : MonoBehaviour {
     public float CarSpeed = 10;
     public float MinCarSpawnTime = 1;
     public float MaxCarSpawnTime = 10;
-    public int InitialFieldLength = 10;
-    public int GenerationGap = 10;
+    public int GenerationGap = 20;
+    public int InitialPlayerZ = 5;
     // public float LineSize = 30;
 
     private List<GameObject> Roads = new List<GameObject>();
@@ -24,6 +24,7 @@ public class MapInitializer : MonoBehaviour {
     private float RoadSize;
     private float GrassSurfaceSize;
     private float LineSize;
+    private int InitialFieldLength = 10;
     private int CurrentFieldLength = 0;
     private List<int> Map = new List<int>();  // Карта игрового поля.
 
@@ -63,7 +64,7 @@ public class MapInitializer : MonoBehaviour {
         GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
 
         // Спавним игрока.
-        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 5), Quaternion.Euler(0, 90, 0));
+        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, InitialPlayerZ), Quaternion.Euler(0, 90, 0));
         Player.name = "_Dude_";
 
         // Спавним машины.
@@ -83,15 +84,17 @@ public class MapInitializer : MonoBehaviour {
     }
 
     void CreateMap() {
-        for (int i = 0; i < Map.Count; i++) {
+        for (int i = 0; i < InitialFieldLength; i++) {
+            Map.Add(0);
             Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
-            Grasses.Last().name = "Line" + CurrentFieldLength;
             CurrentFieldLength++;
         }
     }
 
     void EnlargeMap() {
-        if (Map.Count - PlayerPrefs.GetInt("CurrentZPosition") < GenerationGap) {
+        Debug.Log("Map.Count " + Map.Count);
+        if (Map.Count - ((PlayerPrefs.GetInt("CurrentZPosition"))) < GenerationGap) {
+            Debug.Log("EnlargeMap");
             System.Random random = new System.Random();
             Map.Add(random.Next(0, 2));
 

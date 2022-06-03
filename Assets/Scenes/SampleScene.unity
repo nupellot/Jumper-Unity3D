@@ -383,7 +383,8 @@ MonoBehaviour:
   CarSpeed: 80
   MinCarSpawnTime: 1
   MaxCarSpawnTime: 10
-  Cars: []
+  GenerationGap: 30
+  InitialPlayerZ: 5
 --- !u!114 &705507998
 MonoBehaviour:
   m_ObjectHideFlags: 0
