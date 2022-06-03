@@ -13,11 +13,12 @@ public class MapInitializer : MonoBehaviour {
     public float CarSpeed = 10;
     public float MinCarSpawnTime = 1;
     public float MaxCarSpawnTime = 10;
+    public int InitialFieldLength = 100;
     // public float LineSize = 30;
 
     private List<GameObject> Roads = new List<GameObject>();
     private List<GameObject> Grasses = new List<GameObject>();
-    public List<GameObject> Cars = new List<GameObject>();
+    private List<GameObject> Cars = new List<GameObject>();
     private GameObject Player;
     private float RoadSize;
     private float GrassSurfaceSize;
@@ -30,7 +31,7 @@ public class MapInitializer : MonoBehaviour {
         // Создаём карту.
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
-        GenerateMap(50);  // Получаем двоичную карту.
+        GenerateMap(InitialFieldLength);  // Получаем двоичную карту.
         // Record.text;
 
         // Создаём само полотно.
@@ -72,7 +73,13 @@ public class MapInitializer : MonoBehaviour {
     void Update() {
         CleanDeletedCars();
         SetCarsSpeed();
-        CheckForRecordReset();
+        UpdateRecord();
+        EnlargeMap();
+    }
+
+    void EnlargeMap() {
+        int CurrentZPosition = PlayerPrefs.GetInt("CurrentZPosition");
+
     }
 
     void StartCarSpawn() {
@@ -126,7 +133,7 @@ public class MapInitializer : MonoBehaviour {
         }
     }
 
-    void CheckForRecordReset() {
+    void UpdateRecord() {
         if (Input.GetKeyDown(KeyCode.R)) {
             PlayerPrefs.SetInt("Record", 0);
             Debug.Log("Рекорд сброшен");
