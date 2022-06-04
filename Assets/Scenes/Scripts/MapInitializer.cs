@@ -10,6 +10,7 @@ public class MapInitializer : MonoBehaviour {
     public GameObject Car;
     public GameObject CarBarrier;
     public GameObject PlayerTemplate;
+    public GameObject Tree;
     public float CarSpeed = 10;
     public float MinCarSpawnTime = 1;
     public float MaxCarSpawnTime = 10;
@@ -17,13 +18,16 @@ public class MapInitializer : MonoBehaviour {
     public int InitialPlayerZ = 5;
     // public float LineSize = 30;
 
+    System.Random random = new System.Random();
     private List<GameObject> Roads = new List<GameObject>();
     private List<GameObject> Grasses = new List<GameObject>();
     private List<GameObject> Cars = new List<GameObject>();
+    private List<GameObject> Trees = new List<GameObject>();
     private GameObject Player;
     private float RoadSize;
     private float GrassSurfaceSize;
     private float LineSize;
+    private float LineRatio;
     private int InitialFieldLength = 10;
     private int CurrentFieldLength = 0;
     private List<int> Map = new List<int>();  // Карта игрового поля.
@@ -36,6 +40,7 @@ public class MapInitializer : MonoBehaviour {
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
         LineSize = Roadway.GetComponent<Renderer>().bounds.size.z;
+        LineRatio = Roadway.GetComponent<Renderer>().bounds.size.x / Roadway.GetComponent<Renderer>().bounds.size.z;
         // GenerateMap(InitialFieldLength);  // Получаем двоичную карту.
         // // Record.text;
         //
@@ -87,6 +92,13 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < InitialFieldLength; i++) {
             Map.Add(0);
             Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+
+            Debug.Log("LineRatio " + LineRatio);
+            for (int j = 0; j < LineRatio; j++) {
+                if (random.Next(0, 10) == 5) {
+                    Trees.Add(Instantiate(Tree, new Vector3(LineSize / LineRatio * j, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                }
+            }
             CurrentFieldLength++;
         }
     }
@@ -95,7 +107,6 @@ public class MapInitializer : MonoBehaviour {
         Debug.Log("Map.Count " + Map.Count);
         if (Map.Count - ((PlayerPrefs.GetInt("CurrentZPosition"))) < GenerationGap) {
             Debug.Log("EnlargeMap");
-            System.Random random = new System.Random();
             Map.Add(random.Next(0, 2));
 
             if (Map[Map.Count - 1] == 1) {  // Дорога.
@@ -106,6 +117,12 @@ public class MapInitializer : MonoBehaviour {
             if (Map[Map.Count - 1] == 0) {  // Трава.
                 Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
                 Grasses.Last().name = "Line" + CurrentFieldLength;
+
+                for (int i = 0; i < LineRatio; i++) {
+                    if (random.Next(0, 10) == 5) {
+                        Trees.Add(Instantiate(Tree, new Vector3(LineSize / LineRatio * i, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                    }
+                }
             }
             CurrentFieldLength++;
         }
@@ -132,7 +149,6 @@ public class MapInitializer : MonoBehaviour {
 
 
     void GenerateMap(int MapSize = 10) {
-        System.Random random = new System.Random();
         for (int i = 0; i < MapSize; i++) {
             int kek = random.Next(0, 2);
             // Debug.Log(kek);
