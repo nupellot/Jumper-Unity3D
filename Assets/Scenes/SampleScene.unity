@@ -380,11 +380,14 @@ MonoBehaviour:
   Car: {fileID: 1635105311951270959, guid: f6ded59bb8a967c469cdc7e03857b87e, type: 3}
   CarBarrier: {fileID: 7348224373665679314, guid: b71f47e7d74efc7438c75f4fa7da6805, type: 3}
   PlayerTemplate: {fileID: 1694051082433521165, guid: 01342ae465750404ebcb29f5f677e52c, type: 3}
+  Tree: {fileID: 6355715644226636734, guid: 97433d9dec81d6f4e90f93f96993927d, type: 3}
   CarSpeed: 80
   MinCarSpawnTime: 1
   MaxCarSpawnTime: 10
   GenerationGap: 30
   InitialPlayerZ: 5
+  StandardDeviation: 10
+  ExpectedValue: 0
 --- !u!114 &705507998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -530,7 +533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 17.96997, y: 9}
+  m_AnchoredPosition: {x: 17.96997, y: 9.000061}
   m_SizeDelta: {x: 433.04, y: 221.67}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &863124041

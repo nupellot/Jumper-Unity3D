@@ -99,7 +99,7 @@ public class MapInitializer : MonoBehaviour {
 
             // Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
-                if (random.Next(0, 10) == 0) {
+                if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
                     Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.identity));
                 }
             }
@@ -123,7 +123,7 @@ public class MapInitializer : MonoBehaviour {
                 Grasses.Last().name = "Line" + CurrentFieldLength;
 
                 for (int j = 0; j < LineRatio; j++) {
-                    if (random.Next(0, 10) == 0) {
+                    if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
                         Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.identity));
                     }
                 }
@@ -131,6 +131,7 @@ public class MapInitializer : MonoBehaviour {
             CurrentFieldLength++;
         }
     }
+
 
     void StartCarSpawn() {
         foreach (GameObject Road in Roads) {
@@ -193,10 +194,16 @@ public class MapInitializer : MonoBehaviour {
         }
     }
 
+    // bool YesOrNo(float Probability) {
+    //     if ()
+    // }
 
+    double NormalDistribution(float x) {
+        return (1 / (System.Math.Sqrt(2 * System.Math.PI) * StandardDeviation) * System.Math.Pow(System.Math.E, -System.Math.Pow(x - ExpectedValue, 2) / (2 * System.Math.Pow(StandardDeviation, 2))));
+    }
 
-    float NormalDistribution() {
-        return (1 / (Sqrt(2 * Math.PI) * StandardDeviation) * Math.pow(Math.E, -Math.Pow(x - ExpectedValue, 2) / (2 * Math.Pow(StandardDeviation, 2))));
+    double GetChanceOfSpawn(float x) {
+        return (1 - NormalDistribution(x) / NormalDistribution(0));
     }
 
 }
