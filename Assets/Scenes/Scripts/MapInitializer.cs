@@ -27,6 +27,7 @@ public class MapInitializer : MonoBehaviour {
     private float RoadSize;
     private float GrassSurfaceSize;
     private float LineSize;
+    private float LineLength;
     private float LineRatio;
     private int InitialFieldLength = 10;
     private int CurrentFieldLength = 0;
@@ -40,7 +41,8 @@ public class MapInitializer : MonoBehaviour {
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
         LineSize = Roadway.GetComponent<Renderer>().bounds.size.z;
-        LineRatio = Roadway.GetComponent<Renderer>().bounds.size.x / Roadway.GetComponent<Renderer>().bounds.size.z;
+        LineLength = Roadway.GetComponent<Renderer>().bounds.size.x;
+        LineRatio = LineLength / LineSize;
         // GenerateMap(InitialFieldLength);  // Получаем двоичную карту.
         // // Record.text;
         //
@@ -93,10 +95,10 @@ public class MapInitializer : MonoBehaviour {
             Map.Add(0);
             Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
 
-            Debug.Log("LineRatio " + LineRatio);
+            // Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
-                if (random.Next(0, 10) == 5) {
-                    Trees.Add(Instantiate(Tree, new Vector3(LineSize / LineRatio * j, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                if (random.Next(0, 10) == 0) {
+                    Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.identity));
                 }
             }
             CurrentFieldLength++;
@@ -118,9 +120,9 @@ public class MapInitializer : MonoBehaviour {
                 Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
                 Grasses.Last().name = "Line" + CurrentFieldLength;
 
-                for (int i = 0; i < LineRatio; i++) {
-                    if (random.Next(0, 10) == 5) {
-                        Trees.Add(Instantiate(Tree, new Vector3(LineSize / LineRatio * i, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                for (int j = 0; j < LineRatio; j++) {
+                    if (random.Next(0, 10) == 0) {
+                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.identity));
                     }
                 }
             }
