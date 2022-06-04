@@ -20,6 +20,7 @@ public class movement4 : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        PlayerPrefs.SetInt("CurrentZPosition", 0);
     }
 
 
