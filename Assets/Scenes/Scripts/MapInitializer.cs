@@ -16,6 +16,8 @@ public class MapInitializer : MonoBehaviour {
     public float MaxCarSpawnTime = 10;
     public int GenerationGap = 20;
     public int InitialPlayerZ = 5;
+    public float StandardDeviation = 1;
+    public float ExpectedValue = 0;
     // public float LineSize = 30;
 
     System.Random random = new System.Random();
@@ -192,5 +194,9 @@ public class MapInitializer : MonoBehaviour {
     }
 
 
+
+    float NormalDistribution() {
+        return (1 / (Sqrt(2 * Math.PI) * StandardDeviation) * Math.pow(Math.E, -Math.Pow(x - ExpectedValue, 2) / (2 * Math.Pow(StandardDeviation, 2))));
+    }
 
 }
