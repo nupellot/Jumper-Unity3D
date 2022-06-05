@@ -151,7 +151,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0
+  near clip plane: 0.01
   far clip plane: 150
   field of view: 74.48523
   orthographic: 1
@@ -194,7 +194,7 @@ MonoBehaviour:
   Player: {fileID: 1694051082433521165}
   height: 40
   xShift: 1
-  zShift: 0
+  zShift: 1
   xAngle: 40
   yAngle: -20
   zAngle: 0

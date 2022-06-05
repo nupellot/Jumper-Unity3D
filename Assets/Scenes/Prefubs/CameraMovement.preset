@@ -30,26 +30,26 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: height
-    value: 80
+    value: 100
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: xShift
-    value: 10
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: zShift
-    value: 10
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: xAngle
-    value: 45
+    value: 40
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: yAngle
-    value: -22.5
+    value: -20
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: zAngle
-    value: 0
+    value: -1
     objectReference: {fileID: 0}
   m_ExcludedProperties: []
