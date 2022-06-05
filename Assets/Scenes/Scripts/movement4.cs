@@ -80,7 +80,7 @@ public class movement4 : MonoBehaviour
         if (PlayerPrefs.GetFloat("CurrentZPosition") > PlayerPrefs.GetFloat("Record")) {
             PlayerPrefs.SetFloat("Record", PlayerPrefs.GetFloat("CurrentZPosition"));
         }
-        Debug.Log("Рекорд: " + PlayerPrefs.GetFloat("Record"));
+        
     }
 
     // void OnCollisionEnter(Collision collision) {

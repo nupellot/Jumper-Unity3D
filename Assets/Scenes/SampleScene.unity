@@ -377,7 +377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Roadway: {fileID: 1641548770622326586, guid: f3d10917a2c7779489bef34d1d5ff529, type: 3}
   GrassSurface: {fileID: 721785866156525163, guid: 3eef4aa2b3264d047ad54bf13d92cefc, type: 3}
-  Car: {fileID: 1635105311951270959, guid: f6ded59bb8a967c469cdc7e03857b87e, type: 3}
+  Car: {fileID: 5713517898766447954, guid: c44f8c032f98f89489a50bdd905932d9, type: 3}
   CarBarrier: {fileID: 7348224373665679314, guid: b71f47e7d74efc7438c75f4fa7da6805, type: 3}
   PlayerTemplate: {fileID: 1694051082433521165, guid: 01342ae465750404ebcb29f5f677e52c, type: 3}
   Tree: {fileID: 6355715644226636734, guid: 97433d9dec81d6f4e90f93f96993927d, type: 3}
