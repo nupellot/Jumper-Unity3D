@@ -382,11 +382,11 @@ MonoBehaviour:
   PlayerTemplate: {fileID: 1694051082433521165, guid: 01342ae465750404ebcb29f5f677e52c, type: 3}
   Tree: {fileID: 6355715644226636734, guid: 97433d9dec81d6f4e90f93f96993927d, type: 3}
   CarSpeed: 80
-  MinCarSpawnTime: 1
-  MaxCarSpawnTime: 10
+  MinCarSpawnTime: 100
+  MaxCarSpawnTime: 1000
   GenerationGap: 30
   InitialPlayerZ: 5
-  StandardDeviation: 10
+  StandardDeviation: 8
   ExpectedValue: 0
 --- !u!114 &705507998
 MonoBehaviour:

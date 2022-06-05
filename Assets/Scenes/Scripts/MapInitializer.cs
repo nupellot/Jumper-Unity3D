@@ -15,7 +15,7 @@ public class MapInitializer : MonoBehaviour {
     public float MinCarSpawnTime = 1;
     public float MaxCarSpawnTime = 10;
     public int GenerationGap = 20;
-    public int InitialPlayerZ = 5;
+    public float InitialPlayerZ = (float)0;
     public float StandardDeviation = 1;
     public float ExpectedValue = 0;
     // public float LineSize = 30;
@@ -69,11 +69,11 @@ public class MapInitializer : MonoBehaviour {
         // }
         //
         // Делаем барьеры для автомобилей.
-        GameObject LeftCarBarrier = Instantiate(CarBarrier, new Vector3(0 - GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
-        GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, 0, 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
+        GameObject LeftCarBarrier = Instantiate(CarBarrier, new Vector3(0 - GrassSurface.GetComponent<Renderer>().bounds.size.x / 2,GrassSurface.GetComponent<Renderer>().bounds.size.z / 2 , 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
+        GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, GrassSurface.GetComponent<Renderer>().bounds.size.z / 2 , 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
 
         // Спавним игрока.
-        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, InitialPlayerZ), Quaternion.Euler(0, 90, 0));
+        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 0), Quaternion.Euler(0, 90, 0));
         Player.name = "_Dude_";
 
         // Спавним машины.
@@ -91,7 +91,9 @@ public class MapInitializer : MonoBehaviour {
         SetCarsSpeed();
         UpdateRecord();
     }
-
+    int AngleRandom(){
+      return (random.Next(0, 4)*90);
+    }
     void CreateMap() {
         for (int i = 0; i < InitialFieldLength; i++) {
             Map.Add(0);
@@ -100,7 +102,7 @@ public class MapInitializer : MonoBehaviour {
             // Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
                 if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                    Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                    Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
                 }
             }
             CurrentFieldLength++;
@@ -109,7 +111,7 @@ public class MapInitializer : MonoBehaviour {
 
     void EnlargeMap() {
         Debug.Log("Map.Count " + Map.Count);
-        if (Map.Count - ((PlayerPrefs.GetInt("CurrentZPosition"))) < GenerationGap) {
+        if (Map.Count - ((PlayerPrefs.GetFloat("CurrentZPosition"))) < GenerationGap) {
             Debug.Log("EnlargeMap");
             Map.Add(random.Next(0, 2));
 
@@ -124,7 +126,7 @@ public class MapInitializer : MonoBehaviour {
 
                 for (int j = 0; j < LineRatio; j++) {
                     if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
                     }
                 }
             }
@@ -189,7 +191,7 @@ public class MapInitializer : MonoBehaviour {
 
     void UpdateRecord() {
         if (Input.GetKeyDown(KeyCode.R)) {
-            PlayerPrefs.SetInt("Record", 0);
+            PlayerPrefs.SetFloat("Record", 0);
             Debug.Log("Рекорд сброшен");
         }
     }
@@ -203,7 +205,7 @@ public class MapInitializer : MonoBehaviour {
     }
 
     double GetChanceOfSpawn(float x) {
-        return (1 - NormalDistribution(x) / NormalDistribution(0));
+        return (1 - NormalDistribution(x) / NormalDistribution(ExpectedValue));
     }
 
 }
