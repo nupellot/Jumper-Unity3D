@@ -147,7 +147,8 @@ public class MapInitializer : MonoBehaviour {
 
     IEnumerator CarCoroutine(GameObject Road) {
         while (true) {
-            Cars.Add(Instantiate(Car, Road.transform.position - Road.GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
+            // Cars.Add(Instantiate(Car, Road.transform.position - Road.GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
+            Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2, Car.GetComponent<Renderer>().bounds.size.y, Road.transform.position.z), Quaternion.identity));
             // Cars.Last().name = "Car" + i;
             float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
             yield return new WaitForSeconds(delay);

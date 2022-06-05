@@ -75,13 +75,6 @@ public class movement4 : MonoBehaviour
     }
 
 
-    // private void JumpLogic() {
-    //     if (Input.GetAxis("Jump") > 0) {
-    //         if (_isGrounded) {
-    //             _rb.AddForce(Vector3.up * JumpForce);
-    //         }
-    //     }
-    // }
 
     private void UpdateRecord() {
         if (PlayerPrefs.GetFloat("CurrentZPosition") > PlayerPrefs.GetFloat("Record")) {
