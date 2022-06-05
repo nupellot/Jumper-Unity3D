@@ -68,6 +68,9 @@ public class movement4 : MonoBehaviour
         if (this.transform.position.y - 0.1 >= this.GetComponent<Renderer>().bounds.size.y / 2) {
             // Debug.Log("Not Grounded");
             _rb.AddForce(Vector3.down * AdditionalPressure);
+            if (_rb.velocity.y > 0) {
+                Input.ResetInputAxes();
+            }
         }
     }
 
