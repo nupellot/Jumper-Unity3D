@@ -145,18 +145,18 @@ public class MapInitializer : MonoBehaviour {
                 if (Road.name.Contains("_ToRight")) {  // Машины едут направо.
                     // Случайно определяем, будет машина грузовиком или легковушкой.
                     if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
-                        Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 0, 0)));
+                        Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 0, 0)));
                     } else {  // Грузовик.
-                        Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+                        Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
                     }
                     Cars.Last().name = "Car_ToRight";
                 } else
                 if (Road.name.Contains("_ToLeft")) {
                     // Случайно определяем, будет машина грузовиком или легковушкой.
                     if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
-                        Cars.Add(Instantiate(Car, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Car.GetComponent<Renderer>().bounds.size.x - 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 180, 0)));
+                        Cars.Add(Instantiate(Car, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Car.GetComponent<Renderer>().bounds.size.x - 10, Car.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 180, 0)));
                     } else {  // Грузовик.
-                        Cars.Add(Instantiate(Truck, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Truck.GetComponent<Renderer>().bounds.size.x - 25, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 270, 0)));
+                        Cars.Add(Instantiate(Truck, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Truck.GetComponent<Renderer>().bounds.size.x - 25, Truck.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 270, 0)));
                     }
                     Cars.Last().name = "Car_ToLeft";
                 }
