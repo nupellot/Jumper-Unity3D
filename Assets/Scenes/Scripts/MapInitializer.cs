@@ -8,9 +8,11 @@ public class MapInitializer : MonoBehaviour {
     public GameObject Roadway;  // Дорожное полотно, используемое в построении карты.
     public GameObject GrassSurface;  // Травяная поверхность, используемая в построении карты.
     public GameObject Car;
+    public GameObject Truck;
     public GameObject CarBarrier;
     public GameObject PlayerTemplate;
     public GameObject Tree;
+    public int CarsToTrucks = 3;
     public float CarSpeed = 10;
     public float MinCarSpawnTime = 1;
     public float MaxCarSpawnTime = 10;
@@ -148,7 +150,11 @@ public class MapInitializer : MonoBehaviour {
     IEnumerator CarCoroutine(GameObject Road) {
         while (true) {
             // Cars.Add(Instantiate(Car, Road.transform.position - Road.GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
-            Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
+            if (random.Next(0, CarsToTrucks) == 0) {
+                Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
+            } else {
+                Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+            }
             // Cars.Last().name = "Car" + i;
             float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
             yield return new WaitForSeconds(delay);
