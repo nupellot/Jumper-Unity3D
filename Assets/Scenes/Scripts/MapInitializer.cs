@@ -51,25 +51,8 @@ public class MapInitializer : MonoBehaviour {
         // // Record.text;
         //
         CreateMap();
-                // // Создаём само полотно.
-        // float CurrentZ = 0;  // Переменная, отслеживающая крайнюю позицию карты.
-        // for (int i = 0; i < Map.Count; i++) {
-        //     if (Map[i] == 1) {  // Дорога.
-        //         CurrentZ += RoadSize;
-        //         // Создаём новый элемент дороги и сразу же засовываем его в массив.
-                // Roads.Add(Instantiate(Roadway, new Vector3(0, 0, CurrentZ), Quaternion.identity));
-                // Roads.Last().name = "Line" + i;  // Задаём имя, отоборажающееся в инспекторе.
-        //         Debug.Log("Roadway at " + i);
-        //     } else if (Map[i] == 0) {  // Травяной покров.
-                // CurrentZ += GrassSurfaceSize;
-                // Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, CurrentZ), Quaternion.identity));
-                // Grasses.Last().name = "Line" + i;
-        //         Debug.Log("GrassSurface at " + i);
-        //     } else {
-        //         Debug.Log("Wrong map element " + i + ": " + Map[i]);
-        //     }
-        // }
-        //
+
+
         // Делаем барьеры для автомобилей.
         GameObject LeftCarBarrier = Instantiate(CarBarrier, new Vector3(0 - GrassSurface.GetComponent<Renderer>().bounds.size.x / 2,GrassSurface.GetComponent<Renderer>().bounds.size.z / 2 , 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
         GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, GrassSurface.GetComponent<Renderer>().bounds.size.z / 2 , 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
@@ -113,7 +96,7 @@ public class MapInitializer : MonoBehaviour {
 
     void EnlargeMap() {
 
-        if (Map.Count - ((PlayerPrefs.GetFloat("CurrentZPosition"))) < GenerationGap) {
+        if (Map.Count - ((PlayerPrefs.GetInt("CurrentZPosition"))) < GenerationGap) {
             Debug.Log("EnlargeMap");
             Map.Add(random.Next(0, 2));
 
@@ -150,10 +133,15 @@ public class MapInitializer : MonoBehaviour {
     IEnumerator CarCoroutine(GameObject Road) {
         while (true) {
             // Cars.Add(Instantiate(Car, Road.transform.position - Road.GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
-            if (random.Next(0, CarsToTrucks) == 0) {
-                Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
-            } else {
-                Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+            Debug.Log("Road " + Road.transform.position.z / LineSize + " Player " + PlayerPrefs.GetInt("CurrentZPosition"));
+
+            if (Road.transform.position.z / LineSize > PlayerPrefs.GetInt("CurrentZPosition") - 3) {
+
+                if (random.Next(0, CarsToTrucks) == 0) {
+                  Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
+                } else {
+                  Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+                }
             }
             // Cars.Last().name = "Car" + i;
             float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);

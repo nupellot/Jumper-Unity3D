@@ -20,7 +20,7 @@ public class movement4 : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        PlayerPrefs.SetFloat("CurrentZPosition", ((float)0));
+        PlayerPrefs.SetInt("CurrentZPosition", 0);
     }
 
 
@@ -48,7 +48,7 @@ public class movement4 : MonoBehaviour
                   if (Input.GetAxis("Horizontal") == 0) {
                       if (Input.GetAxis("Vertical") > 0) {  // Это движение вперёд. (Вдоль оси Z)
                           if (PlayerPrefs.HasKey("CurrentZPosition")) {
-                              PlayerPrefs.SetFloat("CurrentZPosition", PlayerPrefs.GetFloat("CurrentZPosition") + (float)1);
+                              PlayerPrefs.SetInt("CurrentZPosition", PlayerPrefs.GetInt("CurrentZPosition") + 1);
                           }
                           _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
                           transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -56,7 +56,7 @@ public class movement4 : MonoBehaviour
                       }
                       if (Input.GetAxis("Vertical") < 0) {
                           if (PlayerPrefs.HasKey("CurrentZPosition")) {
-                              PlayerPrefs.SetFloat("CurrentZPosition", PlayerPrefs.GetFloat("CurrentZPosition")-(float)1);
+                              PlayerPrefs.SetInt("CurrentZPosition", PlayerPrefs.GetInt("CurrentZPosition") - 1);
                           }
                           _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
                           transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -77,10 +77,10 @@ public class movement4 : MonoBehaviour
 
 
     private void UpdateRecord() {
-        if (PlayerPrefs.GetFloat("CurrentZPosition") > PlayerPrefs.GetFloat("Record")) {
-            PlayerPrefs.SetFloat("Record", PlayerPrefs.GetFloat("CurrentZPosition"));
+        if (PlayerPrefs.GetInt("CurrentZPosition") > PlayerPrefs.GetInt("Record")) {
+            PlayerPrefs.SetInt("Record", PlayerPrefs.GetInt("CurrentZPosition"));
         }
-        
+
     }
 
     // void OnCollisionEnter(Collision collision) {

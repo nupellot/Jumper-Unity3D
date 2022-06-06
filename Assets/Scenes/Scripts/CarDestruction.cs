@@ -32,5 +32,9 @@ public class CarDestruction : MonoBehaviour
             // Cars.Remove(this.gameObject);
             Destroy(this.gameObject);
         }
+        if (this.gameObject.CompareTag("Car") && col.gameObject.CompareTag("Car")) {
+            // Cars.Remove(this.gameObject);
+            Destroy(this.gameObject);
+        }
     }
 }
