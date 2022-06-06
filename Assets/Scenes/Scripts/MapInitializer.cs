@@ -100,15 +100,21 @@ public class MapInitializer : MonoBehaviour {
             Debug.Log("EnlargeMap");
             Map.Add(random.Next(0, 2));
 
-            if (Map[Map.Count - 1] == 1) {  // Дорога.
+            if (Map.Last() == 1) {  // Дорога.
+
                 Roads.Add(Instantiate(Roadway, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
-                Roads.Last().name = "Line" + CurrentFieldLength;  // Задаём имя, отоборажающееся в инспекторе.
+                // Рандомно ставим дороге имя, исходя их которого будет определяться направление движения машин.
+                switch (random.Next(0, 2)) {
+                    case 0: Roads.Last().name = "Road" + CurrentFieldLength + "_ToRight"; break;
+                    case 1: Roads.Last().name = "Road" + CurrentFieldLength + "_ToLeft";  break;
+                }
                 StartCarSpawner(Roads[Roads.Count - 1]);
             } else
-            if (Map[Map.Count - 1] == 0) {  // Трава.
+            if (Map.Last() == 0) {  // Трава.
+                // Создаём травяную поверхность.
                 Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
-                Grasses.Last().name = "Line" + CurrentFieldLength;
-
+                Grasses.Last().name = "Grass" + CurrentFieldLength;
+                // Создаём деревья на дороге, используя нормальное распределение.
                 for (int j = 0; j < LineRatio; j++) {
                     if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
                         Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
@@ -132,15 +138,14 @@ public class MapInitializer : MonoBehaviour {
 
     IEnumerator CarCoroutine(GameObject Road) {
         while (true) {
-            // Cars.Add(Instantiate(Car, Road.transform.position - Road.GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
-            Debug.Log("Road " + Road.transform.position.z / LineSize + " Player " + PlayerPrefs.GetInt("CurrentZPosition"));
+            // Debug.Log("Road " + Road.transform.position.z / LineSize + " Player " + PlayerPrefs.GetInt("CurrentZPosition"));
 
             if (Road.transform.position.z / LineSize > PlayerPrefs.GetInt("CurrentZPosition") - 3) {
 
                 if (random.Next(0, CarsToTrucks) == 0) {
-                  Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
+                    Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
                 } else {
-                  Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+                    Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
                 }
             }
             // Cars.Last().name = "Car" + i;
@@ -191,9 +196,6 @@ public class MapInitializer : MonoBehaviour {
         }
     }
 
-    // bool YesOrNo(float Probability) {
-    //     if ()
-    // }
 
     double NormalDistribution(float x) {
         return (1 / (System.Math.Sqrt(2 * System.Math.PI) * StandardDeviation) * System.Math.Pow(System.Math.E, -System.Math.Pow(x - ExpectedValue, 2) / (2 * System.Math.Pow(StandardDeviation, 2))));
