@@ -108,7 +108,7 @@ public class MapInitializer : MonoBehaviour {
                     case 0: Roads.Last().name = "Road" + CurrentFieldLength + "_ToRight"; break;
                     case 1: Roads.Last().name = "Road" + CurrentFieldLength + "_ToLeft";  break;
                 }
-                StartCarSpawner(Roads[Roads.Count - 1]);
+                StartCarSpawner(Roads.Last());
             } else
             if (Map.Last() == 0) {  // Трава.
                 // Создаём травяную поверхность.
@@ -141,12 +141,31 @@ public class MapInitializer : MonoBehaviour {
             // Debug.Log("Road " + Road.transform.position.z / LineSize + " Player " + PlayerPrefs.GetInt("CurrentZPosition"));
 
             if (Road.transform.position.z / LineSize > PlayerPrefs.GetInt("CurrentZPosition") - 3) {
-
-                if (random.Next(0, CarsToTrucks) == 0) {
-                    Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.identity));
-                } else {
-                    Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+                // Исходя из имени дороги определяем, в какую сторону смотрят машины.
+                if (Road.name.Contains("_ToRight")) {  // Машины едут направо.
+                    // Случайно определяем, будет машина грузовиком или легковушкой.
+                    if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
+                        Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 0, 0)));
+                    } else {  // Грузовик.
+                        Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+                    }
+                    Cars.Last().name = "Car_ToRight";
+                } else
+                if (Road.name.Contains("_ToLeft")) {
+                    // Случайно определяем, будет машина грузовиком или легковушкой.
+                    if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
+                        Cars.Add(Instantiate(Car, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Car.GetComponent<Renderer>().bounds.size.x - 10, Car.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 180, 0)));
+                    } else {  // Грузовик.
+                        Cars.Add(Instantiate(Truck, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Truck.GetComponent<Renderer>().bounds.size.x - 25, Truck.GetComponent<Renderer>().bounds.size.y + 2, Road.transform.position.z), Quaternion.Euler(0, 270, 0)));
+                    }
+                    Cars.Last().name = "Car_ToLeft";
                 }
+
+
+                // switch (MovementDirection) {
+                //     case 0: Cars.Last().name = "Car_ToRight"; break;
+                //     case 180: Cars.Last().name = "Car_ToLeft"; break;
+                // }
             }
             // Cars.Last().name = "Car" + i;
             float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
@@ -180,7 +199,12 @@ public class MapInitializer : MonoBehaviour {
     void SetCarsSpeed() {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] != null) {
-                Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+                if (Cars[i].name.Contains("_ToRight")) {
+                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+                } else
+                if (Cars[i].name.Contains("_ToLeft")) {
+                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(-CarSpeed, 0, 0);
+                }
             } else
             if (Cars[i] == null) {
                 Debug.Log("Moving deleted car");
