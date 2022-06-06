@@ -200,10 +200,10 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] != null) {
                 if (Cars[i].name.Contains("_ToRight")) {
-                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
+                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed + Cars[i].transform.position.z / LineSize, 0, 0);
                 } else
                 if (Cars[i].name.Contains("_ToLeft")) {
-                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(-CarSpeed, 0, 0);
+                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(-CarSpeed - Cars[i].transform.position.z / LineSize, 0, 0);
                 }
             } else
             if (Cars[i] == null) {
