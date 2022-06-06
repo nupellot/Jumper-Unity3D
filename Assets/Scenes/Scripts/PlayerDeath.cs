@@ -14,9 +14,14 @@ public class PlayerDeath : MonoBehaviour
     // public Vector3 InitialPosition = new Vector3(Player.GetComponent<Renderer>().bounds.size.x / 2, gameObject.GetComponent<Renderer>().bounds.size.y / 2 + 0.1, gameObject.GetComponent<Renderer>().bounds.size.z / 2);
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
+      if (PlayerPrefs.GetInt("CurrentZPosition")<0){
+        Debug.Log("You're Dead");
+        this.transform.position = new Vector3(0, 5, 0);
+        this.transform.rotation = Quaternion.Euler(0, 0, 0);
+        PlayerPrefs.SetInt("CurrentZPosition", 0);
+      }
     }
 
     void OnCollisionEnter(Collision col) {
@@ -24,6 +29,7 @@ public class PlayerDeath : MonoBehaviour
         if (this.gameObject.CompareTag("Player") && col.gameObject.CompareTag("Car")) {
             Debug.Log("You're Dead");
             this.transform.position = new Vector3(0, 5, 0);
+            this.transform.rotation = Quaternion.Euler(0, 0, 0);
             PlayerPrefs.SetInt("CurrentZPosition", 0);
         }
     }

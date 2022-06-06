@@ -12,17 +12,28 @@ public class movement4 : MonoBehaviour
     public float animationTime = 1;
     public float ForwardForce = 5;
     public float AdditionalPressure = 0;
-
+    public AudioClip JumpSound;
     private bool _isGrounded;
     private Rigidbody _rb;
+    // private AudioSource dynamic;
     // private int CurrentZPosition = 0;
-
+    // public AudioSource music;
+    // public AudioClip jump;
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         PlayerPrefs.SetInt("CurrentZPosition", 0);
+        // dynamic = GetComponent<AudioSource>();
     }
-
+    // private void Awake()
+    // 	{
+    //                  // Добавляем компонент AudioSource к объекту
+    //         music = gameObject.AddComponent<AudioSource>();
+    //                  // Воспроизвести звуковые эффекты в начале
+    //         music.playOnAwake = false;
+    //                  // Загружаем файл звукового эффекта, я назвал скачущий аудиофайл jump
+    //         jump = Resources.Load<AudioClip>("JumpSound.wav");
+    //     }
 
     void FixedUpdate()
     {
@@ -31,12 +42,16 @@ public class movement4 : MonoBehaviour
     }
 
     private void DiscreteMovement() {
+
         // Проверяем, находится ли игрок ниже определенного уровня (условно )
         if (this.transform.position.y - 0.1 <= this.GetComponent<Renderer>().bounds.size.y / 2) {
             // Debug.Log("Is Grounded");
             _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {  // Проиходит прыжок в одном из направлений.
                   _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
+                  GetComponent<AudioSource>().PlayOneShot(JumpSound);
+                  // music.clip = jump;
+                  // music.Play();
                   if (Input.GetAxis("Horizontal") > 0) {
                       _rb.AddForce(new Vector3(1, 0, 0) * ForwardForce);
                       transform.rotation = Quaternion.Euler(0, 90, 0);

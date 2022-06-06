@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 public class MapInitializer : MonoBehaviour {
 
@@ -33,8 +34,8 @@ public class MapInitializer : MonoBehaviour {
     private float LineSize;
     private float LineLength;
     private float LineRatio;
-    private int InitialFieldLength = 10;
-    private int CurrentFieldLength = 0;
+    private int InitialFieldLength = 5;
+    private int CurrentFieldLength = -5;
     private List<int> Map = new List<int>();  // Карта игрового поля.
 
 
@@ -58,7 +59,7 @@ public class MapInitializer : MonoBehaviour {
         GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, GrassSurface.GetComponent<Renderer>().bounds.size.z / 2 , 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
 
         // Спавним игрока.
-        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 0), Quaternion.Euler(0, 90, 0));
+        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 0), Quaternion.Euler(0, 0, 0));
         Player.name = "_Dude_";
 
         // Спавним машины.
@@ -80,7 +81,7 @@ public class MapInitializer : MonoBehaviour {
       return (random.Next(0, 4)*90);
     }
     void CreateMap() {
-        for (int i = 0; i < InitialFieldLength; i++) {
+        for (int i = -5; i < InitialFieldLength; i++) {
             Map.Add(0);
             Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
 
@@ -147,7 +148,7 @@ public class MapInitializer : MonoBehaviour {
                     if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
                         Cars.Add(Instantiate(Car, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Car.GetComponent<Renderer>().bounds.size.x + 10, Car.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 0, 0)));
                     } else {  // Грузовик.
-                        Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 15, Truck.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
+                        Cars.Add(Instantiate(Truck, new Vector3(0 - Road.GetComponent<Renderer>().bounds.size.x / 2 + Truck.GetComponent<Renderer>().bounds.size.x + 25, Truck.GetComponent<Renderer>().bounds.size.y + 2.5f, Road.transform.position.z), Quaternion.Euler(0, 90, 0)));
                     }
                     Cars.Last().name = "Car_ToRight";
                 } else
@@ -156,7 +157,7 @@ public class MapInitializer : MonoBehaviour {
                     if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
                         Cars.Add(Instantiate(Car, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Car.GetComponent<Renderer>().bounds.size.x - 10, Car.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 180, 0)));
                     } else {  // Грузовик.
-                        Cars.Add(Instantiate(Truck, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Truck.GetComponent<Renderer>().bounds.size.x - 25, Truck.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 270, 0)));
+                        Cars.Add(Instantiate(Truck, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Truck.GetComponent<Renderer>().bounds.size.x - 25, Truck.GetComponent<Renderer>().bounds.size.y + 2.5f, Road.transform.position.z), Quaternion.Euler(0, 270, 0)));
                     }
                     Cars.Last().name = "Car_ToLeft";
                 }
@@ -168,7 +169,7 @@ public class MapInitializer : MonoBehaviour {
                 // }
             }
             // Cars.Last().name = "Car" + i;
-            float delay = Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
+            float delay = UnityEngine.Random.Range(MinCarSpawnTime, MaxCarSpawnTime);
             yield return new WaitForSeconds(delay);
         }
     }
@@ -200,10 +201,12 @@ public class MapInitializer : MonoBehaviour {
         for (int i = 0; i < Cars.Count; i++) {
             if (Cars[i] != null) {
                 if (Cars[i].name.Contains("_ToRight")) {
-                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed + Cars[i].transform.position.z / LineSize, 0, 0);
+                    // Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed + (float)Math.Round(Cars[i].transform.position.z / LineSize), 0, 0);
+                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(CarSpeed, 0, 0);
                 } else
                 if (Cars[i].name.Contains("_ToLeft")) {
-                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(-CarSpeed - Cars[i].transform.position.z / LineSize, 0, 0);
+                    // Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(-CarSpeed - Cars[i].transform.position.z / LineSize, 0, 0);
+                    Cars[i].GetComponent<Rigidbody>().velocity = new Vector3(-CarSpeed, 0, 0);
                 }
             } else
             if (Cars[i] == null) {
