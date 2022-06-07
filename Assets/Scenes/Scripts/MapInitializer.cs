@@ -44,9 +44,12 @@ public class MapInitializer : MonoBehaviour {
         // CarDestruction.singleton.CarIsDeleted += DeleteCar;
         // Создаём карту.
         RoadSize = Roadway.GetComponent<Renderer>().bounds.size.z;  // Ширина дороги.
+        Debug.Log("RoadSize: " + RoadSize);
         GrassSurfaceSize = GrassSurface.GetComponent<Renderer>().bounds.size.z;  // Ширина травяного покрова.
+        Debug.Log("GrassSurfaceSize: " + GrassSurfaceSize);
         LineSize = Roadway.GetComponent<Renderer>().bounds.size.z;
         LineLength = Roadway.GetComponent<Renderer>().bounds.size.x;
+        Debug.Log("LineLength: " + LineLength);
         LineRatio = LineLength / LineSize;
         // GenerateMap(InitialFieldLength);  // Получаем двоичную карту.
         // // Record.text;
@@ -78,14 +81,14 @@ public class MapInitializer : MonoBehaviour {
         UpdateRecord();
     }
     int AngleRandom(){
-      return (random.Next(0, 4)*90);
+        return (random.Next(0, 4)*90);
     }
     void CreateMap() {
         for (int i = -5; i < InitialFieldLength; i++) {
             Map.Add(0);
-            Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
-
-            // Debug.Log("LineRatio " + LineRatio);
+            Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y + 1, LineSize * CurrentFieldLength), Quaternion.identity));
+            Debug.Log("Grasses.Count " + Grasses.Count);
+            Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
                 if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
                     Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
@@ -103,7 +106,7 @@ public class MapInitializer : MonoBehaviour {
 
             if (Map.Last() == 1) {  // Дорога.
 
-                Roads.Add(Instantiate(Roadway, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                Roads.Add(Instantiate(Roadway, new Vector3(0, 0 - Roadway.GetComponent<Renderer>().bounds.size.y, LineSize * CurrentFieldLength), Quaternion.identity));
                 // Рандомно ставим дороге имя, исходя их которого будет определяться направление движения машин.
                 switch (random.Next(0, 2)) {
                     case 0: Roads.Last().name = "Road" + CurrentFieldLength + "_ToRight"; break;
@@ -113,14 +116,14 @@ public class MapInitializer : MonoBehaviour {
             } else
             if (Map.Last() == 0) {  // Трава.
                 // Создаём травяную поверхность.
-                Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0, LineSize * CurrentFieldLength), Quaternion.identity));
+                Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y + 1, LineSize * CurrentFieldLength), Quaternion.identity));
                 Grasses.Last().name = "Grass" + CurrentFieldLength;
-                // Создаём деревья на дороге, используя нормальное распределение.
-                for (int j = 0; j < LineRatio; j++) {
-                    if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
-                    }
-                }
+                // // Создаём деревья на дороге, используя нормальное распределение.
+                // for (int j = 0; j < LineRatio; j++) {
+                //     if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
+                //         Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
+                //     }
+                // }
             }
             CurrentFieldLength++;
         }
@@ -217,6 +220,7 @@ public class MapInitializer : MonoBehaviour {
     }
 
     void UpdateRecord() {
+        Debug.Log("Grasses.Count " + Grasses.Count);
         if (Input.GetKeyDown(KeyCode.R)) {
             PlayerPrefs.SetFloat("Record", 0);
             Debug.Log("Рекорд сброшен");

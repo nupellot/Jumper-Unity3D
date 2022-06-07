@@ -27,7 +27,7 @@ public class CarDestruction : MonoBehaviour
 
     void OnCollisionEnter(Collision col) {
         // CarIsDeleted?.Invoke(this.gameObject);
-        Debug.Log("Collision");
+        // Debug.Log("Collision");
         if (this.gameObject.CompareTag("Car") && col.gameObject.CompareTag("Barrier")) {
             // Cars.Remove(this.gameObject);
             Destroy(this.gameObject);
