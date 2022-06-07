@@ -13,6 +13,7 @@ public class MapInitializer : MonoBehaviour {
     public GameObject CarBarrier;
     public GameObject PlayerTemplate;
     public GameObject Tree;
+    public Camera PlayerCamera;
     public int CarsToTrucks = 3;
     public float CarSpeed = 10;
     public float MinCarSpawnTime = 1;
@@ -65,12 +66,7 @@ public class MapInitializer : MonoBehaviour {
         Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 0), Quaternion.Euler(0, 0, 0));
         Player.name = "_Dude_";
 
-        // Спавним машины.
-        // for (int i = 0; i < Roads.Count; i++) {
-        //     Cars.Add(Instantiate(Car, Roads[i].transform.position - Roads[i].GetComponent<Renderer>().bounds.size / 2 + Car.GetComponent<Renderer>().bounds.size / 2, Quaternion.identity));
-        //     Cars.Last().name = "Car" + i;
-        // }
-        // StartCarSpawn();
+        Instantiate(PlayerCamera, new Vector3(0, 40, 0), Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -80,9 +76,12 @@ public class MapInitializer : MonoBehaviour {
         SetCarsSpeed();
         UpdateRecord();
     }
-    int AngleRandom(){
-        return (random.Next(0, 4)*90);
+
+
+    int GetRandomDirection() {
+        return (random.Next(0, 4) * 90);
     }
+
     void CreateMap() {
         for (int i = -5; i < InitialFieldLength; i++) {
             Map.Add(0);
@@ -91,7 +90,7 @@ public class MapInitializer : MonoBehaviour {
             Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
                 if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                    Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
+                    Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0, GetRandomDirection(), 0)));
                 }
             }
             CurrentFieldLength++;
@@ -118,12 +117,12 @@ public class MapInitializer : MonoBehaviour {
                 // Создаём травяную поверхность.
                 Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y / 2 + 1, LineSize * CurrentFieldLength), Quaternion.identity));
                 Grasses.Last().name = "Grass" + CurrentFieldLength;
-                // // Создаём деревья на дороге, используя нормальное распределение.
-                // for (int j = 0; j < LineRatio; j++) {
-                //     if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                //         Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0,AngleRandom(),0)));
-                //     }
-                // }
+                // Создаём деревья на дороге, используя нормальное распределение.
+                for (int j = 0; j < LineRatio; j++) {
+                    if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
+                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0, GetRandomDirection(), 0)));
+                    }
+                }
             }
             CurrentFieldLength++;
         }
@@ -157,10 +156,10 @@ public class MapInitializer : MonoBehaviour {
                 } else
                 if (Road.name.Contains("_ToLeft")) {
                     // Случайно определяем, будет машина грузовиком или легковушкой.
-                    if (random.Next(0, CarsToTrucks) == 0) {  // Легковушка.
-                        Cars.Add(Instantiate(Car, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Car.GetComponent<Renderer>().bounds.size.x - 10, Car.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 180, 0)));
-                    } else {  // Грузовик.
+                    if (random.Next(0, CarsToTrucks) == 0) {  // Грузовик.
                         Cars.Add(Instantiate(Truck, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Truck.GetComponent<Renderer>().bounds.size.x - 25, Truck.GetComponent<Renderer>().bounds.size.y + 2.5f, Road.transform.position.z), Quaternion.Euler(0, 270, 0)));
+                    } else {  // Легковушка.
+                        Cars.Add(Instantiate(Car, new Vector3(0 + Road.GetComponent<Renderer>().bounds.size.x / 2 - Car.GetComponent<Renderer>().bounds.size.x - 10, Car.GetComponent<Renderer>().bounds.size.y + 1.5f, Road.transform.position.z), Quaternion.Euler(0, 180, 0)));
                     }
                     Cars.Last().name = "Car_ToLeft";
                 }
