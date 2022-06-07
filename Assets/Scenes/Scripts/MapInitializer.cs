@@ -33,11 +33,12 @@ public class MapInitializer : MonoBehaviour {
     private float RoadSize;
     private float GrassSurfaceSize;
     private float LineSize;
-    private float LineLength;
-    private float LineRatio;
+    public float LineLength;
+    public float LineRatio;
     private int InitialFieldLength = 5;
     private int CurrentFieldLength = -5;
-    private List<int> Map = new List<int>();  // Карта игрового поля.
+    public List<List<int>> Map = new List<List<int>>();  // Карта игрового поля.
+    public Vector3 Spawn;
 
 
     void Start()
@@ -63,7 +64,8 @@ public class MapInitializer : MonoBehaviour {
         GameObject RightCarBarrier = Instantiate(CarBarrier, new Vector3(0 + GrassSurface.GetComponent<Renderer>().bounds.size.x / 2, GrassSurface.GetComponent<Renderer>().bounds.size.z / 2 , 0 + CarBarrier.GetComponent<Renderer>().bounds.size.x / 2), Quaternion.Euler(0, 0, 90));
 
         // Спавним игрока.
-        Player = Instantiate(PlayerTemplate, new Vector3(0, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2, 0), Quaternion.Euler(0, 0, 0));
+        Spawn = new Vector3((float)(Math.Round((LineRatio) / 2) * (LineSize)) - LineLength / 2 + LineSize / 2, PlayerTemplate.GetComponent<Renderer>().bounds.size.y / 2+1f, 0);
+        Player = Instantiate(PlayerTemplate, Spawn, Quaternion.Euler(0, 0, 0));
         Player.name = "_Dude_";
 
         Instantiate(PlayerCamera, new Vector3(0, 40, 0), Quaternion.identity);
@@ -84,14 +86,20 @@ public class MapInitializer : MonoBehaviour {
 
     void CreateMap() {
         for (int i = -5; i < InitialFieldLength; i++) {
-            Map.Add(0);
+            Map.Add(new List<int>());
             Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y / 2 + 1, LineSize * CurrentFieldLength), Quaternion.identity));
-            Debug.Log("Grasses.Count " + Grasses.Count);
-            Debug.Log("LineRatio " + LineRatio);
+            // Debug.Log("Grasses.Count " + Grasses.Count);
+            // Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
                 if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                    Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0, GetRandomDirection(), 0)));
+                    Map.Last().Add(1); // Трава с деревом.
+                    Trees.Add(Instantiate(Tree, new Vector3(LineSize * j - LineLength / 2 + LineSize / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0, GetRandomDirection(), 0)));
+                } else {
+                    Map.Last().Add(0); // Трава без дерева.
                 }
+            }
+            foreach (int number in Map.Last()) {
+                Debug.Log(number);
             }
             CurrentFieldLength++;
         }
@@ -100,11 +108,15 @@ public class MapInitializer : MonoBehaviour {
     void EnlargeMap() {
 
         if (Map.Count - ((PlayerPrefs.GetInt("CurrentZPosition"))) < GenerationGap) {
-            Debug.Log("EnlargeMap");
-            Map.Add(random.Next(0, 2));
+            // Debug.Log("EnlargeMap");
 
-            if (Map.Last() == 1) {  // Дорога.
+            int k = random.Next(0, 2);
 
+            Map.Add(new List<int>());
+            if (k == 1) {  // Дорога.
+                for (int i = 0; i < LineRatio; i++) {
+                    Map.Last().Add(2);
+                }
                 Roads.Add(Instantiate(Roadway, new Vector3(0, 0 - Roadway.GetComponent<Renderer>().bounds.size.y / 2, LineSize * CurrentFieldLength), Quaternion.identity));
                 // Рандомно ставим дороге имя, исходя их которого будет определяться направление движения машин.
                 switch (random.Next(0, 2)) {
@@ -113,14 +125,17 @@ public class MapInitializer : MonoBehaviour {
                 }
                 StartCarSpawner(Roads.Last());
             } else
-            if (Map.Last() == 0) {  // Трава.
+            if (k == 0) {  // Трава.
                 // Создаём травяную поверхность.
                 Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y / 2 + 1, LineSize * CurrentFieldLength), Quaternion.identity));
                 Grasses.Last().name = "Grass" + CurrentFieldLength;
                 // Создаём деревья на дороге, используя нормальное распределение.
                 for (int j = 0; j < LineRatio; j++) {
                     if (random.Next(0, 1000000) < GetChanceOfSpawn(j - LineRatio / 2) * 1000000) {
-                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0, GetRandomDirection(), 0)));
+                        Map.Last().Add(1); // Трава с деревом.
+                        Trees.Add(Instantiate(Tree, new Vector3(LineLength / LineRatio * j - LineLength / 2 + LineLength / LineRatio / 2, 0, LineSize * CurrentFieldLength), Quaternion.Euler(0, GetRandomDirection(), 0)));
+                    } else {
+                        Map.Last().Add(0); // Трава без дерева.
                     }
                 }
             }
@@ -177,13 +192,13 @@ public class MapInitializer : MonoBehaviour {
     }
 
 
-    void GenerateMap(int MapSize = 10) {
-        for (int i = 0; i < MapSize; i++) {
-            int kek = random.Next(0, 2);
-            // Debug.Log(kek);
-            Map.Add(kek);
-        }
-    }
+    // void GenerateMap(int MapSize = 10) {
+    //     for (int i = 0; i < MapSize; i++) {
+    //         int kek = random.Next(0, 2);
+    //         // Debug.Log(kek);
+    //         Map.Add(kek);
+    //     }
+    // }
 
     void CleanDeletedCars() {
         for (int i = 0; i < Cars.Count; i++) {
@@ -212,16 +227,16 @@ public class MapInitializer : MonoBehaviour {
                 }
             } else
             if (Cars[i] == null) {
-                Debug.Log("Moving deleted car");
+                // Debug.Log("Moving deleted car");
                 // Судя по всему, в обработке удалённой машины нет ничего критичного.
             }
         }
     }
 
     void UpdateRecord() {
-        Debug.Log("Grasses.Count " + Grasses.Count);
+        // Debug.Log("Grasses.Count " + Grasses.Count);
         if (Input.GetKeyDown(KeyCode.R)) {
-            PlayerPrefs.SetFloat("Record", 0);
+            PlayerPrefs.SetInt("Record", 0);
             Debug.Log("Рекорд сброшен");
         }
     }

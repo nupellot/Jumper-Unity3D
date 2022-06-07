@@ -1,4 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using System;
 
 //эта строчка гарантирует что наш скрипт не завалится ести на плеере будет отсутствовать компонент Rigidbody
 [RequireComponent(typeof(Rigidbody))]
@@ -40,42 +44,55 @@ public class movement4 : MonoBehaviour
     {
         DiscreteMovement();
         UpdateRecord();
+
     }
 
     private void DiscreteMovement() {
+        List<List<int>> Map = GameObject.Find("Directional Light").GetComponent<MapInitializer>().Map;
+        float LineLength = GameObject.Find("Directional Light").GetComponent<MapInitializer>().LineLength;
+        float LineRatio = GameObject.Find("Directional Light").GetComponent<MapInitializer>().LineRatio;
 
+        // Debug.Log("y: " + (PlayerPrefs.GetInt("CurrentZPosition") + 5) + " x: " + (int)((transform.position.x + LineLength / 2) / (LineLength / LineRatio)));
         // Проверяем, находится ли игрок ниже определенного уровня (условно )
         if (transform.position.y - GetComponent<Renderer>().bounds.size.y / 2 <= PlayerPrefs.GetFloat("GapBetweenZeroAndPlayer")) {
             // Debug.Log("Is Grounded");
             _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {  // Проиходит прыжок в одном из направлений.
-                  _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
-                  GetComponent<AudioSource>().PlayOneShot(JumpSound);
-                  // music.clip = jump;
-                  // music.Play();
-                  if (Input.GetAxis("Horizontal") > 0) {
+
+
+                  if (Input.GetAxis("Horizontal") > 0 && Map[PlayerPrefs.GetInt("CurrentZPosition") + 5][(int)((transform.position.x + LineLength / 2) / (LineLength / LineRatio)) + 1] != 1) {
                       _rb.AddForce(new Vector3(1, 0, 0) * ForwardForce);
                       transform.rotation = Quaternion.Euler(0, 90, 0);
+                      _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
+                      GetComponent<AudioSource>().PlayOneShot(JumpSound);
                   }
-                  if (Input.GetAxis("Horizontal") < 0) {
+                  if (Input.GetAxis("Horizontal") < 0 && Map[PlayerPrefs.GetInt("CurrentZPosition") + 5][(int)((transform.position.x + LineLength / 2) / (LineLength / LineRatio)) - 1] != 1) {
                       _rb.AddForce(new Vector3(-1, 0, 0) * ForwardForce);
                       transform.rotation = Quaternion.Euler(0, 270, 0);
+                      _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
+                      GetComponent<AudioSource>().PlayOneShot(JumpSound);
                   }
                   if (Input.GetAxis("Horizontal") == 0) {
-                      if (Input.GetAxis("Vertical") > 0) {  // Это движение вперёд. (Вдоль оси Z)
-                          if (PlayerPrefs.HasKey("CurrentZPosition")) {
+                      if (Input.GetAxis("Vertical") > 0 && Map[PlayerPrefs.GetInt("CurrentZPosition") + 5 + 1][(int)((transform.position.x + LineLength / 2) / (LineLength / LineRatio))] != 1) {  // Это движение вперёд. (Вдоль оси Z)
+
+
                               PlayerPrefs.SetInt("CurrentZPosition", PlayerPrefs.GetInt("CurrentZPosition") + 1);
-                          }
+
                           _rb.AddForce(new Vector3(0, 0, 1) * ForwardForce);
                           transform.rotation = Quaternion.Euler(0, 0, 0);
+                          _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
+                          GetComponent<AudioSource>().PlayOneShot(JumpSound);
+
                           // CurrentZPosition += 1;
                       }
-                      if (Input.GetAxis("Vertical") < 0) {
-                          if (PlayerPrefs.HasKey("CurrentZPosition")) {
+                      if (Input.GetAxis("Vertical") < 0 && Map[PlayerPrefs.GetInt("CurrentZPosition") + 5 - 1][(int)((transform.position.x + LineLength / 2) / (LineLength / LineRatio))] != 1) {
+
                               PlayerPrefs.SetInt("CurrentZPosition", PlayerPrefs.GetInt("CurrentZPosition") - 1);
-                          }
+                          
                           _rb.AddForce(new Vector3(0, 0, -1) * ForwardForce);
                           transform.rotation = Quaternion.Euler(0, 180, 0);
+                          _rb.AddForce(Vector3.up * JumpForce);  // Прыжок.
+                          GetComponent<AudioSource>().PlayOneShot(JumpSound);
                           // CurrentZPosition -= 1;
                       }
                   }
@@ -93,9 +110,7 @@ public class movement4 : MonoBehaviour
 
 
     private void UpdateRecord() {
-        if (PlayerPrefs.GetInt("CurrentZPosition") > PlayerPrefs.GetInt("Record")) {
-            PlayerPrefs.SetInt("Record", PlayerPrefs.GetInt("CurrentZPosition"));
-        }
+
 
     }
 

@@ -32,7 +32,7 @@ public class CameraMovement : MonoBehaviour
 
         float RubberSpeedMultiplier = Player.transform.position.z - this.transform.position.z;
         if (RubberSpeedMultiplier < 0) {
-            RubberSpeedMultiplier *= 10;
+            RubberSpeedMultiplier *= 5;
         }
         transform.position = Vector3.Lerp(transform.position, new Vector3(Player.transform.position.x + xShift, height, Player.transform.position.z - zShift), Time.deltaTime * Math.Abs(RubberSpeedMultiplier) * CameraSpeed);
         transform.rotation = Quaternion.Euler(xAngle, yAngle, zAngle);
