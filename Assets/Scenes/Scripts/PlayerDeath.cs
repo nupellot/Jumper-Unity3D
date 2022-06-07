@@ -32,7 +32,7 @@ public class PlayerDeath : MonoBehaviour
 
     void KillThePlayer() {
         Debug.Log("You're Dead");
-        this.transform.position = new Vector3(0, 5, 0);
+        this.transform.position = new Vector3(0, GetComponent<Renderer>().bounds.size.y / 2 + PlayerPrefs.GetFloat("GapBetweenZeroAndPlayer"), 0);
         this.transform.rotation = Quaternion.Euler(0, 0, 0);
         PlayerPrefs.SetInt("CurrentZPosition", 0);
     }

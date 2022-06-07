@@ -86,7 +86,7 @@ public class MapInitializer : MonoBehaviour {
     void CreateMap() {
         for (int i = -5; i < InitialFieldLength; i++) {
             Map.Add(0);
-            Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y + 1, LineSize * CurrentFieldLength), Quaternion.identity));
+            Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y / 2 + 1, LineSize * CurrentFieldLength), Quaternion.identity));
             Debug.Log("Grasses.Count " + Grasses.Count);
             Debug.Log("LineRatio " + LineRatio);
             for (int j = 0; j < LineRatio; j++) {
@@ -106,7 +106,7 @@ public class MapInitializer : MonoBehaviour {
 
             if (Map.Last() == 1) {  // Дорога.
 
-                Roads.Add(Instantiate(Roadway, new Vector3(0, 0 - Roadway.GetComponent<Renderer>().bounds.size.y, LineSize * CurrentFieldLength), Quaternion.identity));
+                Roads.Add(Instantiate(Roadway, new Vector3(0, 0 - Roadway.GetComponent<Renderer>().bounds.size.y / 2, LineSize * CurrentFieldLength), Quaternion.identity));
                 // Рандомно ставим дороге имя, исходя их которого будет определяться направление движения машин.
                 switch (random.Next(0, 2)) {
                     case 0: Roads.Last().name = "Road" + CurrentFieldLength + "_ToRight"; break;
@@ -116,7 +116,7 @@ public class MapInitializer : MonoBehaviour {
             } else
             if (Map.Last() == 0) {  // Трава.
                 // Создаём травяную поверхность.
-                Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y + 1, LineSize * CurrentFieldLength), Quaternion.identity));
+                Grasses.Add(Instantiate(GrassSurface, new Vector3(0, 0 - GrassSurface.GetComponent<Renderer>().bounds.size.y / 2 + 1, LineSize * CurrentFieldLength), Quaternion.identity));
                 Grasses.Last().name = "Grass" + CurrentFieldLength;
                 // // Создаём деревья на дороге, используя нормальное распределение.
                 // for (int j = 0; j < LineRatio; j++) {

@@ -23,6 +23,7 @@ public class movement4 : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         PlayerPrefs.SetInt("CurrentZPosition", 0);
+        PlayerPrefs.SetFloat("GapBetweenZeroAndPlayer", 1.05f);
         // dynamic = GetComponent<AudioSource>();
     }
     // private void Awake()
@@ -44,7 +45,7 @@ public class movement4 : MonoBehaviour
     private void DiscreteMovement() {
 
         // Проверяем, находится ли игрок ниже определенного уровня (условно )
-        if (this.transform.position.y - 0.1 <= this.GetComponent<Renderer>().bounds.size.y / 2) {
+        if (transform.position.y - GetComponent<Renderer>().bounds.size.y / 2 <= PlayerPrefs.GetFloat("GapBetweenZeroAndPlayer")) {
             // Debug.Log("Is Grounded");
             _rb.velocity = new Vector3(0, 0, 0);  // Сбрасываем скорость, чтобы остановить игрока.
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {  // Проиходит прыжок в одном из направлений.
@@ -80,7 +81,7 @@ public class movement4 : MonoBehaviour
                   }
             }
         } else
-        if (this.transform.position.y - 0.1 >= this.GetComponent<Renderer>().bounds.size.y / 2) {
+        if (transform.position.y - GetComponent<Renderer>().bounds.size.y / 2 > PlayerPrefs.GetFloat("GapBetweenZeroAndPlayer")) {
             // Debug.Log("Not Grounded");
             _rb.AddForce(Vector3.down * AdditionalPressure);
             if (_rb.velocity.y > 0) {
